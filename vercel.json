@@ -3,5 +3,11 @@
     "api/**/*.ts": {
       "includeFiles": "{data/**,assets/**,src/assets/fonts/**}"
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }
