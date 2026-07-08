@@ -27,6 +27,7 @@ async function test() {
   const name = "RAVINDER PAL SINGH";
   const nameWidth = nameFont.widthOfTextAtSize(name, pdfNameSize);
   const nameX = pdfNameX - nameWidth / 2;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const nameFontKit = (nameFont as any).embedder?.font;
   const nameDescent = nameFontKit ? (nameFontKit.descent / nameFontKit.unitsPerEm) * pdfNameSize : 0;
 

@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { PDFDocument, rgb, degrees } from 'pdf-lib';
-// @ts-ignore - fontkit type definitions are sometimes not resolved correctly
+// fontkit type definitions are sometimes not resolved correctly
 import fontkit from '@pdf-lib/fontkit';
 import QRCode from 'qrcode';
 import path from 'node:path';
@@ -85,6 +85,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const nameX = pdfNameX - nameWidth / 2;
 
     // Calculate baseline compensation (descent is negative, so subtract to move baseline up)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const nameFontKit = (nameFont as any).embedder?.font;
     const nameDescent = nameFontKit ? (nameFontKit.descent / nameFontKit.unitsPerEm) * pdfNameSize : 0;
 
@@ -107,6 +108,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // PDF-lib pivots on the baseline start. CSS pivots on the bottom-left of the bounding box.
     // For -90 degree rotation, the baseline goes straight down. The descenders extend to the LEFT of the baseline.
     // To match CSS `left` boundary, we must shift the baseline RIGHT by the descender amount.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const serialFontKit = (serialFont as any).embedder?.font;
     const serialDescent = serialFontKit ? (serialFontKit.descent / serialFontKit.unitsPerEm) * pdfSerialSize : 0;
 
