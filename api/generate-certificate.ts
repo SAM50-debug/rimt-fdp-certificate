@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { PDFDocument, rgb, degrees } from 'pdf-lib';
+// @ts-ignore - fontkit type definitions are sometimes not resolved correctly
 import fontkit from '@pdf-lib/fontkit';
 import QRCode from 'qrcode';
 import path from 'node:path';
@@ -7,9 +8,7 @@ import fs from 'node:fs';
 import { findEmployee } from './lib/faculty.js';
 import { CERTIFICATE, extractSerialSuffix } from '../src/constants/certificate.js';
 
-const VERIFY_BASE_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
-  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  : 'https://fdprimt.vercel.app';
+const VERIFY_BASE_URL = 'https://fdprimt.vercel.app';
 
 function hexToRgb(hex: string) {
   const r = parseInt(hex.slice(1, 3), 16) / 255;

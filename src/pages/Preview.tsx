@@ -124,7 +124,7 @@ export default function Preview() {
           }}
         >
           <img 
-            src={`https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(`https://fdp.vercel.app/verify/${employee['Serial No']}`)}`} 
+            src={`https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(`https://fdprimt.vercel.app/verify/${employee['Serial No']}`)}`} 
             alt="QR Code" 
             className="w-full h-full"
           />
