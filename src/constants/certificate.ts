@@ -2,7 +2,7 @@ export const CERTIFICATE = {
   PREVIEW_WIDTH: 874, // 1748 / 2
   PREVIEW_HEIGHT: 620, // 1240 / 2
   NAME_X: 205,
-  NAME_Y: 440,
+  NAME_Y: 460,
   NAME_SIZE: 32,
   NAME_COLOR: "#FF751F",
 
