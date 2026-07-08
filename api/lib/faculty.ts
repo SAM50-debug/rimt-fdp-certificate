@@ -32,3 +32,15 @@ export function findEmployee(employeeCode: string): FacultyRecord | null {
 
   return match ?? null;
 }
+
+export function findBySerialNo(serialNo: string): FacultyRecord | null {
+  const trimmed = serialNo.trim().toLowerCase();
+  if (!trimmed) return null;
+
+  const rows = loadFacultyData();
+  const match = rows.find(
+    (row) => String(row['Serial No']).trim().toLowerCase() === trimmed
+  );
+
+  return match ?? null;
+}

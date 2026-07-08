@@ -21,6 +21,23 @@ export async function findEmployee(employeeCode: string): Promise<FacultyRecord 
   return response.json() as Promise<FacultyRecord>;
 }
 
+export async function findEmployeeBySerialNo(serialNo: string): Promise<FacultyRecord | null> {
+  const response = await fetch('/api/find-employee', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ serialNo }),
+  });
+
+  if (response.status === 404) return null;
+
+  if (!response.ok) {
+    const data = await response.json();
+    throw new Error(data.error || 'Server error');
+  }
+
+  return response.json() as Promise<FacultyRecord>;
+}
+
 export async function downloadCertificate(employeeCode: string): Promise<void> {
   const response = await fetch('/api/generate-certificate', {
     method: 'POST',
