@@ -9,7 +9,7 @@ import { CERTIFICATE, extractSerialSuffix } from '../src/constants/certificate.j
 
 const VERIFY_BASE_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
   ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  : 'https://fdp.vercel.app';
+  : 'https://fdprimt.vercel.app';
 
 function hexToRgb(hex: string) {
   const r = parseInt(hex.slice(1, 3), 16) / 255;
@@ -104,13 +104,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const pdfSerialX = CERTIFICATE.SERIAL_SUFFIX_X * scaleX;
     const pdfSerialY = CERTIFICATE.SERIAL_SUFFIX_Y * scaleY;
 
+    // Baseline compensation for rotated text: 
+    // PDF-lib pivots on the baseline start. CSS pivots on the bottom-left of the bounding box.
+    // For -90 degree rotation, the baseline goes straight down. The descenders extend to the LEFT of the baseline.
+    // To match CSS `left` boundary, we must shift the baseline RIGHT by the descender amount.
+    const serialFontKit = (serialFont as any).embedder?.font;
+    const serialDescent = serialFontKit ? (serialFontKit.descent / serialFontKit.unitsPerEm) * pdfSerialSize : 0;
+
     page.drawText(serialSuffix, {
-      x: pdfSerialX,
-      y: pdfSerialY,
+      x: pdfSerialX - serialDescent, // Subtract negative descent = move right
+      y: pdfSerialY, // CSS bottom edge perfectly aligns with the rotation start
       size: pdfSerialSize,
       font: serialFont,
       color: hexToRgb(CERTIFICATE.SERIAL_SUFFIX_COLOR),
-      rotate: degrees(CERTIFICATE.SERIAL_SUFFIX_ROTATION),
+      rotate: degrees(-CERTIFICATE.SERIAL_SUFFIX_ROTATION), // Negated because PDF-lib is CCW, CSS is CW
     });
 
     // Generate and embed QR code

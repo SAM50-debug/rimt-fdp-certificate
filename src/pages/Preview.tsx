@@ -107,6 +107,7 @@ export default function Preview() {
             bottom: `${CERTIFICATE.SERIAL_SUFFIX_Y}px`,
             transform: `rotate(${CERTIFICATE.SERIAL_SUFFIX_ROTATION}deg)`,
             transformOrigin: 'left bottom',
+            lineHeight: 1,
           }}
         >
           {extractSerialSuffix(serialNo)}
