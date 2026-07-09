@@ -84,13 +84,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const nameWidth = nameFont.widthOfTextAtSize(name, pdfNameSize);
     const nameX = pdfNameX - nameWidth / 2;
 
-    // Calculate baseline compensation (descent is negative, so subtract to move baseline up)
+    // Calculate baseline compensation.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const nameFontKit = (nameFont as any).embedder?.font;
-    const nameDescent = nameFontKit ? (nameFontKit.descent / nameFontKit.unitsPerEm) * pdfNameSize : 0;
+    const nameDescent = nameFontKit
+      ? (nameFontKit.descent / nameFontKit.unitsPerEm) * pdfNameSize
+      : 0;
 
     page.drawText(name, {
-      x: nameX,
+      x: pdfNameX,
       y: pdfNameY - nameDescent,
       size: pdfNameSize,
       font: nameFont,
@@ -99,7 +101,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // Draw serial number suffix
     const serialSuffix = extractSerialSuffix(serialNo);
-    
+
     const pdfSerialSize = CERTIFICATE.SERIAL_SUFFIX_SIZE * scaleY;
     const pdfSerialX = CERTIFICATE.SERIAL_SUFFIX_X * scaleX;
     const pdfSerialY = CERTIFICATE.SERIAL_SUFFIX_Y * scaleY;
@@ -125,12 +127,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const qrPng = await generateQrPng(verifyUrl);
     const qrImage = await pdfDoc.embedPng(qrPng);
     const pdfQrSize = CERTIFICATE.QR_SIZE * scaleX;
-    
-    page.drawImage(qrImage, { 
-      x: CERTIFICATE.QR_X * scaleX, 
-      y: CERTIFICATE.QR_Y * scaleY, 
-      width: pdfQrSize, 
-      height: pdfQrSize 
+
+    page.drawImage(qrImage, {
+      x: CERTIFICATE.QR_X * scaleX,
+      y: CERTIFICATE.QR_Y * scaleY,
+      width: pdfQrSize,
+      height: pdfQrSize
     });
 
     // Serialize
@@ -140,14 +142,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     res.setHeader('Content-Disposition', `attachment; filename="${serialNo}.pdf"`);
     return res.status(200).send(Buffer.from(pdfBytes));
   } catch (err) {
-      console.error(err);
+    console.error(err);
 
-      if (err instanceof Error) {
-        console.error(err.stack);
-      }
+    if (err instanceof Error) {
+      console.error(err.stack);
+    }
 
-      return res.status(500).json({
-        error: err instanceof Error ? err.message : "Unknown error"
+    return res.status(500).json({
+      error: err instanceof Error ? err.message : "Unknown error"
     });
   }
 }

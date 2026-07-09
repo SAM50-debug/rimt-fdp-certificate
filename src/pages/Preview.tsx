@@ -215,7 +215,7 @@ export default function Preview() {
                 color: CERTIFICATE.NAME_COLOR,
                 left: `${CERTIFICATE.NAME_X}px`,
                 bottom: `${CERTIFICATE.NAME_Y}px`,
-                transform: 'translateX(-50%)',
+                // transform: 'translateX(-50%)',
                 lineHeight: 1,
               }}
             >
